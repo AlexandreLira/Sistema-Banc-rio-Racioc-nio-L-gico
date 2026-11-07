@@ -39,6 +39,8 @@ Os valores serão representados em **reais inteiros positivos**, conforme os req
 
 ## Tecnologias e organização dos dados
 
+O programa deve usar apenas JavaScript em um único `index.js`, sem HTML, CSS, frameworks, dependências externas, módulos ou ferramentas de compilação. A execução ocorre como snippet no navegador, com `prompt` e `console.log`. Markdown e o `package.json` existente podem permanecer como arquivos auxiliares; npm e Node não são necessários para executar o sistema.
+
 O projeto utiliza **JavaScript no navegador**, com entradas por `prompt` e resultados por `console.log`. Os dados serão mantidos em memória com objetos e arrays, sem banco de dados ou armazenamento permanente. Ao iniciar uma nova execução, o estado será reiniciado.
 
 A estrutura definida nos requisitos utiliza dois arrays:
@@ -52,9 +54,9 @@ Cada Pix terá **um único registro** em `movimentacoes`. No extrato da origem, 
 
 Essa é a estrutura prevista para a V1. Os dados de exemplo presentes no código inicial ainda precisam ser ajustados na [issue #1](https://github.com/AlexandreLira/projeto-v3-raciocinio-logico/issues/1).
 
-## Como executar o código atual
+## Como executar
 
-Ainda não existe uma página HTML de entrada. Para experimentar o código inicial, use um **snippet** — um trecho de código salvo nas ferramentas de desenvolvedor — no Chrome ou no Edge:
+A forma oficial de execução é copiar o conteúdo completo de `index.js` para um único **snippet** — um trecho de código salvo nas ferramentas de desenvolvedor — no Chrome ou no Edge:
 
 1. Baixe o repositório ou clone com Git:
 
@@ -72,6 +74,35 @@ Nesta etapa, o resultado esperado é a exibição do menu e a leitura da opção
 
 O `prompt` usado neste exercício é fornecido pelo navegador. Executar `node index.js` não oferece essa função. Não é necessário instalar dependências para experimentar o código atual.
 
+## Organização prevista de index.js
+
+A base da issue #1 organizará o arquivo nas seguintes seções, com uma única declaração por função:
+
+1. Dados e controle: `usuarios`, `movimentacoes`, `usuarioLogadoId` e `proximaMovimentacaoId`.
+2. Validação de valores: `solicitarValor()`.
+3. Login: `fazerLogin()`.
+4. Consulta de saldo: `consultarSaldo(usuarioId)`.
+5. Depósito: `depositar(usuarioId)`.
+6. Saque: `sacar(usuarioId)`.
+7. Extrato: `exibirExtrato(usuarioId)`.
+8. Pix: `enviarPix(usuarioId)`.
+9. Menu: `exibirMenu(usuarioId)`.
+10. Inicialização: chamar o login e abrir o menu somente quando retornar um ID.
+
+### Contratos das funções
+
+| Função | Contrato |
+| --- | --- |
+| `fazerLogin()` | Guarda o ID em `usuarioLogadoId` e retorna esse ID; retorna `null` ao cancelar. |
+| `exibirMenu(usuarioId)` | Repete o menu, chama as operações e encerra com `0` ou cancelamento. |
+| `consultarSaldo(usuarioId)` | Exibe o saldo da conta indicada. |
+| `solicitarValor()` | Retorna `{ status: "valido", valor }`, `{ status: "invalido" }` ou `{ status: "cancelado" }`. Não altera os dados. |
+| `depositar(usuarioId)` / `sacar(usuarioId)` | Solicitam valor e atualizam saldo, histórico e contador apenas após todas as validações. |
+| `exibirExtrato(usuarioId)` | Exibe os registros da conta sem alterar dados. |
+| `enviarPix(usuarioId)` | Solicita destinatário e valor; valida, atualiza as duas contas e registra um único Pix. |
+
+As funções acessam os arrays e o contador compartilhados definidos no início do arquivo. Funções provisórias serão substituídas pela implementação na mesma seção, sem duplicar declarações.
+
 ## Organização da equipe
 
 | Integrante | Responsabilidades | Issues |
@@ -83,6 +114,8 @@ O `prompt` usado neste exercício é fornecido pelo navegador. Executar `node in
 A equipe começa pela issue #1, que define a base e os contratos das funções. Depois, os colegas trabalham em paralelo seguindo as dependências indicadas nas issues. Os três participam da validação final e da preparação da demonstração.
 
 ## Como contribuir
+
+Cada integrante altera apenas as seções de sua responsabilidade em uma branch. Atualize a branch antes da revisão e resolva conflitos preservando as funções dos colegas. Os PRs integram as alterações ao mesmo `index.js`; não é necessário concatenar arquivos. AlexandreLira cuida dos dados, da inicialização, do Pix e da integração; Colega 1 cuida de login, saldo, menu e extrato; Colega 2 cuida de validação, depósito e saque.
 
 1. Leia a issue atribuída e confira se suas dependências já foram concluídas.
 2. Atualize sua cópia do projeto e crie uma branch para a tarefa, como `feat/2-login`.
@@ -96,6 +129,10 @@ AlexandreLira revisará as entregas dos colegas; um dos colegas revisará as ent
 ## Requisitos e validação
 
 O documento [`requisitos-sistema-bancario.md`](requisitos-sistema-bancario.md) descreve as regras de negócio, a estrutura de dados e os cenários de aceitação. Ele é a referência para implementar e conferir cada funcionalidade.
+
+Para testar uma função isoladamente, use uma cópia temporária do snippet completo e substitua somente o trecho de inicialização por chamadas de teste. Mantenha os dados e as funções necessários. Recarregue a página antes de executar novamente para recriar o estado inicial. Dados temporários e chamadas de teste não devem entrar no arquivo entregue.
+
+Para validar Pix enviado e recebido, chame `exibirExtrato` para os dois IDs no mesmo snippet de teste, após preparar ou realizar a transferência. Isso não acrescenta troca de usuário ao menu.
 
 A validação prevista é manual, incluindo operações válidas, entradas inválidas, cancelamentos e saldo insuficiente. Ainda não há uma suíte de testes automatizados; o comando `npm test` contém apenas a configuração inicial do projeto.
 

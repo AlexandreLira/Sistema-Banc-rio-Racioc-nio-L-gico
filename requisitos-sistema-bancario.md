@@ -6,12 +6,46 @@ Simular um sistema bancário no navegador, com vários usuários fictícios. O u
 
 ## Escopo e restrições
 
+- O programa deve usar apenas JavaScript em um único `index.js`, sem HTML, CSS, frameworks, dependências externas, módulos ou ferramentas de compilação. A execução ocorre como snippet no navegador, com `prompt` e `console.log`. Markdown e o `package.json` existente podem permanecer como arquivos auxiliares; npm e Node não são necessários para executar o sistema.
 - A V1 tem usuários fictícios previamente cadastrados, cada um com uma única conta e uma chave Pix. Ana e Bruno são as contas de demonstração descritas abaixo; suas credenciais servem apenas para testar o exercício.
 - Cada conta começa com saldo de R$ 0. O histórico de movimentações começa vazio. Os dados ficam em memória, usando apenas objetos e arrays, sem banco de dados ou armazenamento permanente, e são reiniciados a cada nova execução.
 - O Pix é uma simulação local entre usuários cadastrados, sem integração com serviços bancários reais.
-- A entrada de dados usa `prompt`. O exercício pratica variáveis, objetos, arrays, `while` e `for`. A proposta assume que comparações e condicionais (`if` e `else`) também foram vistas em sala. A conversão das entradas e a exibição dos resultados devem seguir os recursos permitidos pelo professor.
+- A entrada de dados usa `prompt`. O exercício pratica variáveis, operadores, funções, objetos, arrays, `while` e `for`. As saídas usam `console.log`. A proposta assume que comparações e condicionais (`if` e `else`) também foram vistas em sala. A conversão das entradas e a exibição dos resultados devem seguir os recursos permitidos pelo professor.
 - Cadastro de contas durante a execução e armazenamento permanente ficam fora da V1.
 - A execução atende um usuário autenticado por vez. Escolher **0 — Sair** encerra o programa; a V1 não inclui troca de usuário durante a execução.
+
+## Organização e execução
+
+O único arquivo de programa será `index.js`, com as seguintes seções:
+
+1. Dados e controle: `usuarios`, `movimentacoes`, `usuarioLogadoId` e `proximaMovimentacaoId`.
+2. Validação de valores: `solicitarValor()`.
+3. Login: `fazerLogin()`.
+4. Consulta de saldo: `consultarSaldo(usuarioId)`.
+5. Depósito: `depositar(usuarioId)`.
+6. Saque: `sacar(usuarioId)`.
+7. Extrato: `exibirExtrato(usuarioId)`.
+8. Pix: `enviarPix(usuarioId)`.
+9. Menu: `exibirMenu(usuarioId)`.
+10. Inicialização: chamar o login e abrir o menu somente quando retornar um ID.
+
+Copiar o arquivo completo para um único snippet no navegador. Recarregar a página e executar o snippet novamente inicia uma nova execução, com saldos zero e histórico vazio.
+
+Para testar uma função isoladamente, use uma cópia temporária do snippet completo e substitua somente o trecho de inicialização por chamadas de teste. Mantenha os dados e as funções necessários. Recarregue a página antes de executar novamente para recriar o estado inicial. Dados temporários e chamadas de teste não devem entrar no arquivo entregue.
+
+### Contratos das funções
+
+| Função | Contrato |
+| --- | --- |
+| `fazerLogin()` | Guarda o ID em `usuarioLogadoId` e retorna esse ID; retorna `null` ao cancelar. |
+| `exibirMenu(usuarioId)` | Repete o menu, chama as operações e encerra com `0` ou cancelamento. |
+| `consultarSaldo(usuarioId)` | Exibe o saldo da conta indicada. |
+| `solicitarValor()` | Retorna `{ status: "valido", valor }`, `{ status: "invalido" }` ou `{ status: "cancelado" }`. Não altera os dados. |
+| `depositar(usuarioId)` / `sacar(usuarioId)` | Solicitam valor e atualizam saldo, histórico e contador apenas após todas as validações. |
+| `exibirExtrato(usuarioId)` | Exibe os registros da conta sem alterar dados. |
+| `enviarPix(usuarioId)` | Solicita destinatário e valor; valida, atualiza as duas contas e registra um único Pix. |
+
+Os dados e o contador são compartilhados pelas funções. A implementação de cada função substitui seu ponto provisório na mesma seção, sem declarações duplicadas.
 
 ## Estrutura de dados
 
@@ -128,6 +162,7 @@ Cada cenário começa com os dados iniciais, salvo quando indicar um saldo ou um
 | Conceito | Aplicação |
 | --- | --- |
 | Variáveis | Guardar o ID do usuário autenticado, o próximo ID de movimentação e as entradas do usuário. |
+| Funções | Separar validação, login, menu e operações em responsabilidades com contratos definidos. |
 | Objetos | Representar cada usuário e cada movimentação com seus campos. |
 | Arrays | Agrupar os usuários cadastrados e o histórico compartilhado de movimentações. |
 | `prompt` | Solicitar login, senha, opção do menu, chave Pix e valores. |
