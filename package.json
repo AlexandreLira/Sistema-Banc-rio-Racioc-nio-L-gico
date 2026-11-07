@@ -1,0 +1,20 @@
+{
+  "name": "projeto-v3-raciocinio-logico",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/AlexandreLira/projeto-v3-raciocinio-logico#readme",
+  "bugs": {
+    "url": "https://github.com/AlexandreLira/projeto-v3-raciocinio-logico/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlexandreLira/projeto-v3-raciocinio-logico.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
