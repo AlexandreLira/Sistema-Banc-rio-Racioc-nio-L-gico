@@ -108,14 +108,14 @@ As funções acessam os arrays e o contador compartilhados definidos no início 
 | Integrante | Responsabilidades | Issues |
 | --- | --- | --- |
 | [AlexandreLira](https://github.com/AlexandreLira) | Preparar a base, implementar Pix, revisar entregas e integrar a versão final. | [#1 — Base](https://github.com/AlexandreLira/projeto-v3-raciocinio-logico/issues/1), [#8 — Pix](https://github.com/AlexandreLira/projeto-v3-raciocinio-logico/issues/8), [#9 — Integração](https://github.com/AlexandreLira/projeto-v3-raciocinio-logico/issues/9) |
-| Integrante a definir — Colega 1 | Implementar login, menu, consulta de saldo e extrato. | [#2 — Login](https://github.com/AlexandreLira/projeto-v3-raciocinio-logico/issues/2), [#3 — Menu e saldo](https://github.com/AlexandreLira/projeto-v3-raciocinio-logico/issues/3), [#7 — Extrato](https://github.com/AlexandreLira/projeto-v3-raciocinio-logico/issues/7) |
-| Integrante a definir — Colega 2 | Implementar validação de valores, depósito e saque. | [#4 — Validação](https://github.com/AlexandreLira/projeto-v3-raciocinio-logico/issues/4), [#5 — Depósito](https://github.com/AlexandreLira/projeto-v3-raciocinio-logico/issues/5), [#6 — Saque](https://github.com/AlexandreLira/projeto-v3-raciocinio-logico/issues/6) |
+| [Felipe](https://github.com/felipelima208mj) | Implementar login, menu, consulta de saldo e extrato. | [#2 — Login](https://github.com/AlexandreLira/projeto-v3-raciocinio-logico/issues/2), [#3 — Menu e saldo](https://github.com/AlexandreLira/projeto-v3-raciocinio-logico/issues/3), [#7 — Extrato](https://github.com/AlexandreLira/projeto-v3-raciocinio-logico/issues/7) |
+| [Ribamar](https://github.com/ribamarj486-charadinha) | Implementar validação de valores, depósito e saque. | [#4 — Validação](https://github.com/AlexandreLira/projeto-v3-raciocinio-logico/issues/4), [#5 — Depósito](https://github.com/AlexandreLira/projeto-v3-raciocinio-logico/issues/5), [#6 — Saque](https://github.com/AlexandreLira/projeto-v3-raciocinio-logico/issues/6) |
 
 A equipe começa pela issue #1, que define a base e os contratos das funções. Depois, os colegas trabalham em paralelo seguindo as dependências indicadas nas issues. Os três participam da validação final e da preparação da demonstração.
 
 ## Como contribuir
 
-Cada integrante altera apenas as seções de sua responsabilidade em uma branch. Atualize a branch antes da revisão e resolva conflitos preservando as funções dos colegas. Os PRs integram as alterações ao mesmo `index.js`; não é necessário concatenar arquivos. AlexandreLira cuida dos dados, da inicialização, do Pix e da integração; Colega 1 cuida de login, saldo, menu e extrato; Colega 2 cuida de validação, depósito e saque.
+Cada integrante altera apenas as seções de sua responsabilidade em uma branch. Atualize a branch antes da revisão e resolva conflitos preservando as funções dos colegas. Os PRs integram as alterações ao mesmo `index.js`; não é necessário concatenar arquivos. AlexandreLira cuida dos dados, da inicialização, do Pix e da integração; [Felipe](https://github.com/felipelima208mj) cuida de login, saldo, menu e extrato; [Ribamar](https://github.com/ribamarj486-charadinha) cuida de validação, depósito e saque.
 
 1. Leia a issue atribuída e confira se suas dependências já foram concluídas.
 2. Atualize sua cópia do projeto e crie uma branch para a tarefa, como `feat/2-login`.
