@@ -1,6 +1,12 @@
-# Sistema Bancário — Raciocínio Lógico
+# Ueno Bank
 
-Projeto acadêmico desenvolvido por uma equipe de três integrantes para a disciplina de **Raciocínio Lógico**. A proposta é construir uma simulação bancária em JavaScript, aplicando a resolução de problemas e a construção de algoritmos a situações como consultar saldo, sacar e transferir valores entre contas.
+![Logo Ueno Bank — Raciocínio Lógico](assets/logo-ueno-bank.png)
+
+**Raciocínio Lógico**
+
+Simulação bancária acadêmica desenvolvida por três estudantes para a disciplina de **Raciocínio Lógico**. Feita em JavaScript, tem como escopo usuários, saldos, depósitos, saques, extratos e Pix com objetos e arrays em memória.
+
+O nome faz uma referência satírica ao banco paraguaio, sem vínculo com a instituição real. A identidade visual é utilizada na documentação e na apresentação acadêmica.
 
 ## Estado do projeto
 
