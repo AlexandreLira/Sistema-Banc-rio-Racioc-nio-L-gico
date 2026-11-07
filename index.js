@@ -1,4 +1,6 @@
 
+// Simulação de um sistema bancário simples
+
 const usuarios = [
     {
         id: 1,
@@ -10,31 +12,74 @@ const usuarios = [
     }
 ]
 
-const movimentacoes = [
-    [
-        {
-            id: 1,
-            tipo: "deposito",
-            valor: 100,
-            origemId: null,
-            destinoId: 1
-        },
-        {
-            id: 2,
-            tipo: "pix",
-            valor: 30,
-            origemId: 1,
-            destinoId: 2
-        }
-    ]
-]
+const movimentacoes = []
+
+let usuarioLogado = {};
+
+// ==== Início do programa ====
+main();
 
 
-console.log("MENU DE OPÇÕES");
-console.log("Opção 1 : Saldo");
-console.log("Opção 2 : Depósito");
-console.log("Opção 3 : Saque");
-console.log("Opção 4 : Extrato");
-console.log("Opção 0 : Sair");
+// ==== FUNCÕES DO SISTEMA BANCÁRIO ==== 
 
-let opcao = prompt("Escolha sua opção:");
+
+
+// Função para gerar um ID aleatório
+function gerarId() {
+    const id = Math.floor(Math.random() * 1000);
+    return id;
+}
+
+// Função para realizar o login do usuário
+function login() {
+
+}
+
+// Função para exibir o menu de opções
+function exibirMenu() {
+    console.log("MENU DE OPÇÕES");
+    console.log("Opção 1 : Saldo");
+    console.log("Opção 2 : Depósito");
+    console.log("Opção 3 : Saque");
+    console.log("Opção 4 : Extrato");
+    console.log("Opção 0 : Sair");
+}
+// Função para consultar o saldo do usuário
+function consultarSaldo() {
+
+}
+
+// Função para realizar um depósito
+function solicitarValor() {
+
+}
+
+
+// Função para realizar um deposito
+function depositar() {
+
+}
+
+// função para realizar um saque
+function sacar() {
+
+}
+
+// funcão para exibir o extrato do usuário
+function exibirExtrato() {
+
+}
+
+// Função enviar pix
+function enviarPix() {
+
+}
+
+// Função principal do sistema bancário
+function main() {
+    exibirMenu();
+}
+
+
+
+
