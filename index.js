@@ -322,8 +322,83 @@ function exibirExtrato(usuarioId) {
 
 
 // Função enviar pix
-function enviarPix() {
+function enviarPix(usuarioId) {
+    let origem = null;
 
+    for (let i = 0; i < usuarios.length; i++) {
+        if (usuarios[i].id === usuarioId) {
+            origem = usuarios[i];
+            break;
+        }
+    }
+
+    if (origem === null) {
+        console.log("Conta de origem não encontrada.");
+        return;
+    }
+
+    let chavePix = prompt("Digite a chave Pix do destinatário:");
+
+    if (chavePix === null) {
+        return;
+    }
+
+    let destinatario = null;
+
+    for (let i = 0; i < usuarios.length; i++) {
+        if (usuarios[i].chavePix === chavePix) {
+            destinatario = usuarios[i];
+            break;
+        }
+    }
+
+    if (destinatario === null) {
+        console.log("Destinatário inválido.");
+        return;
+    }
+
+    if (destinatario.id === origem.id) {
+        console.log("Não é permitido enviar Pix para a própria conta.");
+        return;
+    }
+
+    let resultado = solicitarValor();
+
+    if (resultado.status === "cancelado") {
+        return;
+    }
+
+    if (resultado.status === "invalido") {
+        console.log("Valor inválido!");
+        return;
+    }
+
+    if (resultado.valor > origem.saldo) {
+        console.log("Saldo insuficiente.");
+        return;
+    }
+
+    let proximoId = 1;
+
+    for (let i = 0; i < movimentacoes.length; i++) {
+        if (movimentacoes[i].id >= proximoId) {
+            proximoId = movimentacoes[i].id + 1;
+        }
+    }
+
+    origem.saldo = origem.saldo - resultado.valor;
+    destinatario.saldo = destinatario.saldo + resultado.valor;
+    movimentacoes.push({
+        id: proximoId,
+        tipo: "pix",
+        valor: resultado.valor,
+        origemId: origem.id,
+        destinoId: destinatario.id
+    });
+
+    console.log("Pix realizado com sucesso!");
+    console.log("Valor enviado: R$ " + resultado.valor);
+    console.log("Destinatário: " + destinatario.nome);
 }
 
 // Função principal do sistema bancário
