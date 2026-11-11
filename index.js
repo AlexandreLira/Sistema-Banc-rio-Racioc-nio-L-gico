@@ -89,18 +89,24 @@ function consultarSaldo() {
 
 // Função para realizar um depósito
 function solicitarValor() {
+
+    // Solicitar o valor uma única vez
     let entrada = prompt("Digite o valor:");
 
+    // Verificar se o usuário cancelou
     if (entrada === null) {
         return { status: "cancelado" };
     }
 
+    // Verificar se a entrada está vazia
     if (entrada.trim() === "") {
         return { status: "invalido" };
     }
 
+    // Converter a entrada para número
     let valor = Number(entrada);
 
+    // Verificar se é um número finito, inteiro e positivo
     if (
         !Number.isFinite(valor) ||
         !Number.isInteger(valor) ||
@@ -109,6 +115,7 @@ function solicitarValor() {
         return { status: "invalido" };
     }
 
+    // Retornar o valor validado
     return {
         status: "valido",
         valor: valor
