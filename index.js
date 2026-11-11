@@ -89,14 +89,87 @@ function consultarSaldo() {
 
 // Função para realizar um depósito
 function solicitarValor() {
+    let entrada = prompt("Digite o valor:");
 
+    if (entrada === null) {
+        return { status: "cancelado" };
+    }
+
+    if (entrada.trim() === "") {
+        return { status: "invalido" };
+    }
+
+    let valor = Number(entrada);
+
+    if (
+        !Number.isFinite(valor) ||
+        !Number.isInteger(valor) ||
+        valor <= 0
+    ) {
+        return { status: "invalido" };
+    }
+
+    return {
+        status: "valido",
+        valor: valor
+    };
 }
 
 
 // Função para realizar um deposito
-function depositar() {
 
+function depositar(usuarioId) {
+
+    // Solicitar o valor
+    let resultado = solicitarValor();
+
+    // Verificar se foi cancelado
+    if (resultado.status === "cancelado") {
+        return;
+    }
+
+    // Verificar se o valor é inválido
+    if (resultado.status === "invalido") {
+        console.log("Valor inválido!");
+        return;
+    }
+
+    // Procurar a conta pelo ID
+    let conta = null;
+
+    for (let i = 0; i < usuarios.length; i++) {
+
+        if (usuarios[i].id === usuarioId) {
+            conta = usuarios[i];
+            break;
+        }
+    }
+
+    // Verificar se a conta existe
+    if (conta === null) {
+        console.log("Conta não encontrada.");
+        return;
+    }
+
+    // Atualizar o saldo
+    conta.saldo = conta.saldo + resultado.valor;
+
+    // Registrar a movimentação
+    movimentacoes.push({
+        id: gerarId(),
+        tipo: "deposito",
+        valor: resultado.valor,
+        origemId: null,
+        destinoId: usuarioId
+    });
+
+
+    // Confirmar o depósito
+    console.log("Depósito realizado com sucesso!");
+    console.log("Valor depositado: R$ " + resultado.valor);
+    console.log("Saldo atual: R$ " + conta.saldo);
 }
+
 
 // função para realizar um saque
 function sacar() {
@@ -187,6 +260,7 @@ function enviarPix() {
 // Função principal do sistema bancário
 function main() {
     exibirMenu();
+    depositar(1)
 }
 
 
