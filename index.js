@@ -101,19 +101,60 @@ function fazerLogin() {
   }
 }
 
+
 // Função para exibir o menu de opções
-function exibirMenu() {
-    console.log("MENU DE OPÇÕES");
-    console.log("Opção 1 : Saldo");
-    console.log("Opção 2 : Depósito");
-    console.log("Opção 3 : Saque");
-    console.log("Opção 4 : Extrato");
-    console.log("Opção 0 : Sair");
+function exibirMenu(usuarioId) {
+  let executando = true;
+  
+  while (executando) {
+    const opcao = prompt(
+      "Escolha uma opção:\n" +
+      "1 — Saldo\n" +
+      "2 — Depósito\n" +
+      "3 — Saque\n" +
+      "4 — Extrato\n" +
+      "5 — Pix\n" +
+      "0 — Sair"
+    );
+    
+    // Tratar cancelamento (null) ou opção "0 — Sair"
+    if (opcao === null || opcao.trim() === "0") {
+      executando = false;
+      break;
+    }
+    
+    const opcaoTrim = opcao.trim();
+    
+    if (opcaoTrim === "1") {
+      consultarSaldo(usuarioId);
+    } else if (opcaoTrim === "2") {
+      depositar(usuarioId);
+    } else if (opcaoTrim === "3") {
+      sacar(usuarioId);
+    } else if (opcaoTrim === "4") {
+      exibirExtrato(usuarioId);
+    } else if (opcaoTrim === "5") {
+      enviarPix(usuarioId);
+    } else {
+      alert("Opção inválida. Escolha uma opção válida do menu.");
+    }
+  }
 }
 // Função para consultar o saldo do usuário
-function consultarSaldo() {
-
+function consultarSaldo(usuarioId) {
+  let usuario = null;
+  for (let i = 0; i < usuarios.length; i++) {
+    if (usuarios[i].id === usuarioId) {
+      usuario = usuarios[i];
+      break;
+    }
+  }
+  
+  if (usuario !== null) {
+    console.log(`Seu saldo atual é: R$ ${usuario.saldo}`);
+  }
 }
+
 
 // Função para realizar um depósito
 function solicitarValor() {
