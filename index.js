@@ -55,7 +55,11 @@ const movimentacoes = [
 let usuarioLogado = {};
 
 // ==== Início do programa ====
-main();
+var usuarioLogadoId = fazerLogin();
+
+if (usuarioLogadoId !== null) {
+    exibirMenu(usuarioLogadoId);
+}
 
 
 // ==== FUNCÕES DO SISTEMA BANCÁRIO ==== 
@@ -74,18 +78,63 @@ function login() {
 }
 
 // Função para exibir o menu de opções
-function exibirMenu() {
-    console.log("MENU DE OPÇÕES");
-    console.log("Opção 1 : Saldo");
-    console.log("Opção 2 : Depósito");
-    console.log("Opção 3 : Saque");
-    console.log("Opção 4 : Extrato");
-    console.log("Opção 0 : Sair");
+function exibirMenu(usuarioId) {
+    var opcao;
+
+    while (true) {
+        opcao = prompt(
+            "========== UENO BANK ==========\n" +
+            "1 - Consultar saldo\n" +
+            "2 - Depositar\n" +
+            "3 - Sacar\n" +
+            "4 - Extrato\n" +
+            "5 - Pix\n" +
+            "0 - Sair\n" +
+            "===============================\n" +
+            "Escolha uma opção:"
+        );
+
+        if (opcao === null || opcao === "0") {
+            console.log("Obrigado por utilizar o Ueno Bank!");
+            break;
+        }
+
+        if (opcao === "1") {
+            consultarSaldo(usuarioId);
+        }
+        else if (opcao === "2") {
+            depositar(usuarioId);
+        }
+        else if (opcao === "3") {
+            sacar(usuarioId);
+        }
+        else if (opcao === "4") {
+            exibirExtrato(usuarioId);
+        }
+        else if (opcao === "5") {
+            enviarPix(usuarioId);
+        }
+        else {
+            console.log("Opção inválida! Tente novamente.");
+        }
+    }
 }
 // Função para consultar o saldo do usuário
-function consultarSaldo() {
+function consultarSaldo(usuarioId) {
+    for (var i = 0; i < usuarios.length; i++) {
+        if (usuarios[i].id === usuarioId) {
+            console.log("========== SALDO ==========");
+            console.log("Titular: " + usuarios[i].nome);
+            console.log("Saldo: R$ " + usuarios[i].saldo);
+            console.log("===========================");
+            return;
+        }
+    }
 
+    console.log("Usuário não encontrado.");
 }
+
+
 
 // Função para realizar um depósito
 function solicitarValor() {
