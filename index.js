@@ -9,10 +9,48 @@ const usuarios = [
         senha: "1234",
         chavePix: "85988282464",
         saldo: 0
-    }
+    },
+    {
+        id: 2,
+        nome: "Felipe",
+        login: "felp",
+        senha: "1973",
+        chavePix: "85985440535",
+        saldo: 0
+    },
 ]
 
-const movimentacoes = []
+
+const movimentacoes = [
+    {
+        id: 1,
+        tipo: "deposito",
+        valor: 500,
+        origemId: null,
+        destinoId: 1
+    },
+    {
+        id: 2,
+        tipo: "saque",
+        valor: 100,
+        origemId: 1,
+        destinoId: null
+    },
+    {
+        id: 3,
+        tipo: "pix",
+        valor: 150,
+        origemId: 1,
+        destinoId: 2
+    },
+    {
+        id: 4,
+        tipo: "deposito",
+        valor: 300,
+        origemId: null,
+        destinoId: 3
+    }
+];
 
 let usuarioLogado = {};
 
@@ -66,9 +104,80 @@ function sacar() {
 }
 
 // funcão para exibir o extrato do usuário
-function exibirExtrato() {
+function exibirExtrato(usuarioId) {
+    var encontrouMovimentacao = false;
 
+    console.log("========== EXTRATO ==========");
+
+    for (var i = 0; i < movimentacoes.length; i++) {
+        var movimentacao = movimentacoes[i];
+
+        if (
+            movimentacao.origemId === usuarioId ||
+            movimentacao.destinoId === usuarioId
+        ) {
+            encontrouMovimentacao = true;
+
+            if (movimentacao.tipo === "deposito") {
+                console.log(
+                    "Depósito: R$ " + movimentacao.valor
+                );
+            } 
+            else if (movimentacao.tipo === "saque") {
+                console.log(
+                    "Saque: R$ " + movimentacao.valor
+                );
+            } 
+            else if (movimentacao.tipo === "pix") {
+
+                if (movimentacao.origemId === usuarioId) {
+                    var destinatario = null;
+
+                    for (var j = 0; j < usuarios.length; j++) {
+                        if (usuarios[j].id === movimentacao.destinoId) {
+                            destinatario = usuarios[j];
+                            break;
+                        }
+                    }
+
+                    if (destinatario !== null) {
+                        console.log(
+                            "Pix enviado para " +
+                            destinatario.nome +
+                            ": R$ " + movimentacao.valor
+                        );
+                    }
+                } 
+                else {
+                    var remetente = null;
+
+                    for (var j = 0; j < usuarios.length; j++) {
+                        if (usuarios[j].id === movimentacao.origemId) {
+                            remetente = usuarios[j];
+                            break;
+                        }
+                    }
+
+                    if (remetente !== null) {
+                        console.log(
+                            "Pix recebido de " +
+                            remetente.nome +
+                            ": R$ " + movimentacao.valor
+                        );
+                    }
+                }
+            }
+        }
+    }
+
+    if (!encontrouMovimentacao) {
+        console.log("Nenhuma movimentação registrada");
+    }
+
+    console.log("=============================");
 }
+
+
 
 // Função enviar pix
 function enviarPix() {
