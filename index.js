@@ -72,8 +72,33 @@ function gerarId() {
 }
 
 // Função para realizar o login do usuário
-function login() {
-
+function fazerLogin() {
+  while (true) {
+    const loginInput = prompt("Digite o login:");
+    if (loginInput === null) {
+      return null;
+    }
+    
+    const senhaInput = prompt("Digite a senha:");
+    if (senhaInput === null) {
+      return null;
+    }
+    
+    let usuarioEncontrado = null;
+    for (let i = 0; i < usuarios.length; i++) {
+      if (usuarios[i].login === loginInput && usuarios[i].senha === senhaInput) {
+        usuarioEncontrado = usuarios[i];
+        break;
+      }
+    }
+    
+    if (usuarioEncontrado !== null) {
+      usuarioLogadoId = usuarioEncontrado.id;
+      return usuarioLogadoId;
+    } else {
+      alert("Usuário ou senha inválidos");
+    }
+  }
 }
 
 // Função para exibir o menu de opções
@@ -263,6 +288,7 @@ function enviarPix() {
 // Função principal do sistema bancário
 function main() {
     exibirMenu();
+    fazerLogin()
 }
 
 
