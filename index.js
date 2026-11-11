@@ -1,4 +1,7 @@
 
+const prompt = require('prompt-sync')();
+
+
 // Simulação de um sistema bancário simples
 
 const usuarios = [
@@ -260,7 +263,6 @@ function enviarPix() {
 // Função principal do sistema bancário
 function main() {
     exibirMenu();
-    depositar(1)
 }
 
 

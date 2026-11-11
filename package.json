@@ -17,5 +17,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"
+  },
+  "dependencies": {
+    "prompt-sync": "^4.2.0"
   }
 }
