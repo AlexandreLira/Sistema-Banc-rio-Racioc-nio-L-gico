@@ -1,6 +1,6 @@
 # Ueno Bank
 
-![Logo Ueno Bank — Raciocínio Lógico](assets/logo-ueno-bank.png)
+![Logo Ueno Bank — O Banco da Esperança](assets/logo-ueno-bank.png)
 
 **Raciocínio Lógico**
 
