@@ -10,9 +10,9 @@ O nome faz uma referência satírica ao banco paraguaio, sem vínculo com a inst
 
 ## Estado do projeto
 
-**Em desenvolvimento.** Atualmente, o arquivo [`index.js`](index.js) contém dados de exemplo, exibe um menu no console e solicita uma opção com `prompt`. A opção ainda não executa uma operação bancária, e o login ainda não está implementado.
+**V1 integrada para demonstração.** O arquivo [`index.js`](index.js) inicia com três contas fictícias da equipe e oferece login, consulta de saldo, depósito, saque, extrato e Pix. As operações e o histórico existem apenas em memória e são reiniciados a cada nova execução.
 
-As funcionalidades completas e a adequação dos dados iniciais estão organizadas nas [issues do projeto](https://github.com/AlexandreLira/projeto-v3-raciocinio-logico/issues), agrupadas na milestone [V1 — Sistema bancário com Pix](https://github.com/AlexandreLira/projeto-v3-raciocinio-logico/milestone/1).
+O projeto é uma simulação acadêmica local, sem integração com serviços bancários. As funcionalidades da V1 foram organizadas nas [issues do projeto](https://github.com/AlexandreLira/Sistema-Banc-rio-Racioc-nio-L-gico/issues), agrupadas na milestone [V1 — Sistema bancário com Pix](https://github.com/AlexandreLira/Sistema-Banc-rio-Racioc-nio-L-gico/milestone/1).
 
 ## Objetivos de aprendizagem
 
@@ -45,9 +45,9 @@ Os valores serão representados em **reais inteiros positivos**, conforme os req
 
 ## Tecnologias e organização dos dados
 
-O programa deve usar apenas JavaScript em um único `index.js`, sem HTML, CSS, frameworks, dependências externas, módulos ou ferramentas de compilação. A execução ocorre como snippet no navegador, com `prompt` e `console.log`. Markdown e o `package.json` existente podem permanecer como arquivos auxiliares; npm e Node não são necessários para executar o sistema.
+O programa usa JavaScript em um único `index.js`, sem HTML, CSS, frameworks ou ferramentas de compilação. A execução usa Node.js e a dependência `prompt-sync` já declarada no `package.json`; a saída é exibida com `console.log`. Markdown e os arquivos do npm são auxiliares do projeto.
 
-O projeto utiliza **JavaScript no navegador**, com entradas por `prompt` e resultados por `console.log`. Os dados serão mantidos em memória com objetos e arrays, sem banco de dados ou armazenamento permanente. Ao iniciar uma nova execução, o estado será reiniciado.
+Os dados são mantidos em memória com objetos e arrays, sem banco de dados ou armazenamento permanente. Ao iniciar um novo processo, o estado é reiniciado.
 
 A estrutura definida nos requisitos utiliza dois arrays:
 
@@ -58,31 +58,52 @@ A estrutura definida nos requisitos utiliza dois arrays:
 
 Cada Pix terá **um único registro** em `movimentacoes`. No extrato da origem, ele será apresentado como “Pix enviado”; no extrato do destino, como “Pix recebido”. Depósitos terão `origemId` igual a `null`, e saques terão `destinoId` igual a `null`.
 
-Essa é a estrutura prevista para a V1. Os dados de exemplo presentes no código inicial ainda precisam ser ajustados na [issue #1](https://github.com/AlexandreLira/projeto-v3-raciocinio-logico/issues/1).
+O estado inicial contém Alexandre, Felipe e Ribamar com saldo zero, histórico vazio, `usuarioLogadoId` igual a `null` e próxima movimentação igual a `1`.
 
 ## Como executar
 
-A forma oficial de execução é copiar o conteúdo completo de `index.js` para um único **snippet** — um trecho de código salvo nas ferramentas de desenvolvedor — no Chrome ou no Edge:
+Para executar o sistema, instale a dependência uma vez e inicie o programa pelo terminal:
 
-1. Baixe o repositório ou clone com Git:
+1. Baixe ou clone o repositório:
 
    ```bash
-   git clone https://github.com/AlexandreLira/projeto-v3-raciocinio-logico.git
+   git clone https://github.com/AlexandreLira/Sistema-Banc-rio-Racioc-nio-L-gico.git
+   cd Sistema-Banc-rio-Racioc-nio-L-gico
    ```
 
-2. Abra uma página comum no navegador e abra as ferramentas de desenvolvedor pelo menu do navegador, em **Mais ferramentas → Ferramentas do desenvolvedor**.
-3. Na aba **Sources / Fontes**, encontre **Snippets**. Se necessário, use o menu de abas adicionais do painel.
-4. Crie um snippet e copie para ele o conteúdo de [`index.js`](index.js).
-5. Execute o snippet com o botão de execução ou com `Ctrl + Enter` no Windows/Linux e `Command + Enter` no macOS.
-6. Digite uma opção no `prompt` e consulte a aba **Console** para visualizar o menu impresso.
+2. Instale a dependência e inicie o programa:
 
-Nesta etapa, o resultado esperado é a exibição do menu e a leitura da opção. As operações serão adicionadas conforme as issues forem concluídas. Para repetir a experiência em um contexto limpo, recarregue a página antes de executar novamente.
+   ```bash
+   npm install
+   npm start
+   ```
 
-O `prompt` usado neste exercício é fornecido pelo navegador. Executar `node index.js` não oferece essa função. Não é necessário instalar dependências para experimentar o código atual.
+3. Digite login, senha e opções no terminal. Use **0 — Sair da conta** para voltar ao login e entrar em outra conta; o estado permanece até encerrar o processo. Inicie novamente com `npm start` para zerar os saldos e o histórico.
 
-## Organização prevista de index.js
+Credenciais fictícias da equipe:
 
-A base da issue #1 organizará o arquivo nas seguintes seções, com uma única declaração por função:
+| Nome | Login | Senha | Chave Pix |
+| --- | --- | --- | --- |
+| Alexandre | `alex` | `1234` | `alex` |
+| Felipe | `felp` | `1234` | `felp` |
+| Ribamar | `riba` | `1234` | `riba` |
+
+O `prompt-sync` fornece entrada síncrona no terminal. Para começar outra demonstração do zero, encerre e inicie novamente com `npm start`.
+
+### Roteiro de demonstração
+
+1. Entre como Alexandre (`alex` / `1234`) e consulte o saldo inicial de R$ 0.
+2. Deposite R$ 100 e confira o saldo e o extrato.
+3. Saque R$ 30 e confirme o saldo de R$ 70.
+4. Envie um Pix de R$ 20 para a chave `felp`; Alexandre fica com R$ 50.
+5. Escolha **0 — Sair da conta**, entre como Felipe (`felp` / `1234`) e consulte o extrato; ele mostra o Pix recebido de Alexandre e saldo de R$ 20.
+6. Escolha **0 — Sair da conta** para voltar ao login. Encerre com `Ctrl+C`; uma nova execução inicia com saldos zero e histórico vazio.
+
+O menu permite alternar entre contas durante a mesma execução, mantendo os dados em memória. Assim, você pode conferir o Pix enviado e recebido nos extratos de Alexandre e Felipe sem chamadas de teste.
+
+## Organização de index.js
+
+O arquivo organiza dados, validação, login, operações, menu e inicialização nas seguintes seções, com uma única declaração por função:
 
 1. Dados e controle: `usuarios`, `movimentacoes`, `usuarioLogadoId` e `proximaMovimentacaoId`.
 2. Validação de valores: `solicitarValor()`.
@@ -100,24 +121,24 @@ A base da issue #1 organizará o arquivo nas seguintes seções, com uma única 
 | Função | Contrato |
 | --- | --- |
 | `fazerLogin()` | Guarda o ID em `usuarioLogadoId` e retorna esse ID; retorna `null` ao cancelar. |
-| `exibirMenu(usuarioId)` | Repete o menu, chama as operações e encerra com `0` ou cancelamento. |
+| `exibirMenu(usuarioId)` | Repete o menu, chama as operações e retorna ao login com `0`; o cancelamento do menu encerra o processo. |
 | `consultarSaldo(usuarioId)` | Exibe o saldo da conta indicada. |
 | `solicitarValor()` | Retorna `{ status: "valido", valor }`, `{ status: "invalido" }` ou `{ status: "cancelado" }`. Não altera os dados. |
 | `depositar(usuarioId)` / `sacar(usuarioId)` | Solicitam valor e atualizam saldo, histórico e contador apenas após todas as validações. |
 | `exibirExtrato(usuarioId)` | Exibe os registros da conta sem alterar dados. |
 | `enviarPix(usuarioId)` | Solicita destinatário e valor; valida, atualiza as duas contas e registra um único Pix. |
 
-As funções acessam os arrays e o contador compartilhados definidos no início do arquivo. Funções provisórias serão substituídas pela implementação na mesma seção, sem duplicar declarações.
+As funções acessam os arrays e o contador compartilhados no início do arquivo. O contador avança somente quando uma operação é concluída.
 
 ## Organização da equipe
 
 | Integrante | Responsabilidades | Issues |
 | --- | --- | --- |
-| [AlexandreLira](https://github.com/AlexandreLira) | Preparar a base, implementar Pix, revisar entregas e integrar a versão final. | [#1 — Base](https://github.com/AlexandreLira/projeto-v3-raciocinio-logico/issues/1), [#8 — Pix](https://github.com/AlexandreLira/projeto-v3-raciocinio-logico/issues/8), [#9 — Integração](https://github.com/AlexandreLira/projeto-v3-raciocinio-logico/issues/9) |
-| [Felipe](https://github.com/felipelima208mj) | Implementar login, menu, consulta de saldo e extrato. | [#2 — Login](https://github.com/AlexandreLira/projeto-v3-raciocinio-logico/issues/2), [#3 — Menu e saldo](https://github.com/AlexandreLira/projeto-v3-raciocinio-logico/issues/3), [#7 — Extrato](https://github.com/AlexandreLira/projeto-v3-raciocinio-logico/issues/7) |
-| [Ribamar](https://github.com/ribamarj486-charadinha) | Implementar validação de valores, depósito e saque. | [#4 — Validação](https://github.com/AlexandreLira/projeto-v3-raciocinio-logico/issues/4), [#5 — Depósito](https://github.com/AlexandreLira/projeto-v3-raciocinio-logico/issues/5), [#6 — Saque](https://github.com/AlexandreLira/projeto-v3-raciocinio-logico/issues/6) |
+| [AlexandreLira](https://github.com/AlexandreLira) | Preparar a base, implementar Pix, revisar entregas e integrar a versão final. | [#1 — Base](https://github.com/AlexandreLira/Sistema-Banc-rio-Racioc-nio-L-gico/issues/1), [#8 — Pix](https://github.com/AlexandreLira/Sistema-Banc-rio-Racioc-nio-L-gico/issues/8), [#9 — Integração](https://github.com/AlexandreLira/Sistema-Banc-rio-Racioc-nio-L-gico/issues/9) |
+| [Felipe](https://github.com/felipelima208mj) | Implementar login, menu, consulta de saldo e extrato. | [#2 — Login](https://github.com/AlexandreLira/Sistema-Banc-rio-Racioc-nio-L-gico/issues/2), [#3 — Menu e saldo](https://github.com/AlexandreLira/Sistema-Banc-rio-Racioc-nio-L-gico/issues/3), [#7 — Extrato](https://github.com/AlexandreLira/Sistema-Banc-rio-Racioc-nio-L-gico/issues/7) |
+| [Ribamar](https://github.com/ribamarj486-charadinha) | Implementar validação de valores, depósito e saque. | [#4 — Validação](https://github.com/AlexandreLira/Sistema-Banc-rio-Racioc-nio-L-gico/issues/4), [#5 — Depósito](https://github.com/AlexandreLira/Sistema-Banc-rio-Racioc-nio-L-gico/issues/5), [#6 — Saque](https://github.com/AlexandreLira/Sistema-Banc-rio-Racioc-nio-L-gico/issues/6) |
 
-A equipe começa pela issue #1, que define a base e os contratos das funções. Depois, os colegas trabalham em paralelo seguindo as dependências indicadas nas issues. Os três participam da validação final e da preparação da demonstração.
+A equipe dividiu a implementação por função. A issue #9 reúne a verificação integrada dos contratos e cenários da V1 e a preparação da demonstração.
 
 ## Como contribuir
 
@@ -136,10 +157,10 @@ AlexandreLira revisará as entregas dos colegas; um dos colegas revisará as ent
 
 O documento [`requisitos-sistema-bancario.md`](requisitos-sistema-bancario.md) descreve as regras de negócio, a estrutura de dados e os cenários de aceitação. Ele é a referência para implementar e conferir cada funcionalidade.
 
-Para testar uma função isoladamente, use uma cópia temporária do snippet completo e substitua somente o trecho de inicialização por chamadas de teste. Mantenha os dados e as funções necessários. Recarregue a página antes de executar novamente para recriar o estado inicial. Dados temporários e chamadas de teste não devem entrar no arquivo entregue.
+Para testar uma função isoladamente, use uma cópia temporária de `index.js` e substitua somente a inicialização por chamadas de teste. Mantenha os dados e as funções necessários. Um novo processo recria o estado inicial. Dados temporários e chamadas de teste não devem entrar no arquivo entregue.
 
-Para validar Pix enviado e recebido, chame `exibirExtrato` para os dois IDs no mesmo snippet de teste, após preparar ou realizar a transferência. Isso não acrescenta troca de usuário ao menu.
+Para validar Pix enviado e recebido, faça a transferência, escolha **0 — Sair da conta**, entre com o login do destinatário e consulte seu extrato. Os saldos e o histórico continuam disponíveis durante o processo.
 
-A validação prevista é manual, incluindo operações válidas, entradas inválidas, cancelamentos e saldo insuficiente. Ainda não há uma suíte de testes automatizados; o comando `npm test` contém apenas a configuração inicial do projeto.
+A validação da entrega é manual, cobrindo operações válidas, entradas inválidas, cancelamentos e saldo insuficiente. Não há suíte automatizada no projeto; `npm test` ainda é apenas o script inicial do pacote.
 
-Para verificar os dois extratos de um Pix, será necessário consultar os registros dos dois usuários no mesmo estado em memória. A V1 não prevê troca de usuário durante a execução, e reiniciar o programa limpa os dados.
+Sair da conta retorna ao login e mantém os dados em memória para a próxima sessão. Encerrar e iniciar o processo limpa saldos e movimentações.
