@@ -72,7 +72,7 @@ function fazerLogin() {
     
     if (usuarioEncontrado !== null) {
       usuarioLogadoId = usuarioEncontrado.id;
-      console.log(`\nBem-vindo, ${usuarioEncontrado.nome}!`);
+      console.log(`\n[OK] Bem-vindo ao Ueno Bank, ${usuarioEncontrado.nome}! Ainda estamos operando... por enquanto.`);
       return usuarioLogadoId;
     } else {
       console.log("\n[ERRO] Login ou senha inválidos. Confira os dados e tente novamente.\n");
@@ -84,15 +84,19 @@ function fazerLogin() {
 // Função para exibir o menu de opções
 function exibirMenu(usuarioId) {
   while (true) {
-    console.log("\n========================================");
-    console.log("             UENO BANK | MENU");
-    console.log("========================================");
-    console.log("  1  Consultar saldo");
-    console.log("  2  Fazer depósito");
-    console.log("  3  Fazer saque");
-    console.log("  4  Consultar extrato");
-    console.log("  5  Enviar Pix");
-    console.log("  0  Sair da conta");
+    console.log("\n+--------------------------------------+");
+    console.log("|              UENO BANK               |");
+    console.log("|       O BANCO DA ESPERANCA            |");
+    console.log("+--------------------------------------+");
+    console.log("Seu dinheiro entra com confiança,");
+    console.log("seu saque depende da esperança!");
+    console.log("----------------------------------------");
+    console.log("[1] Consultar saldo");
+    console.log("[2] Depositar dinheiro");
+    console.log("[3] Sacar (com esperança)");
+    console.log("[4] Extrato da esperança");
+    console.log("[5] Pix — Faça alguém feliz");
+    console.log("[0] Sair da conta (voltar ao login)");
     console.log("----------------------------------------");
 
     const opcao = prompt("Selecione uma opção de 0 a 5: ");
@@ -104,7 +108,8 @@ function exibirMenu(usuarioId) {
     }
 
     if (opcao.trim() === "0") {
-      console.log("\nVocê saiu da conta. Faça login para continuar.");
+      console.log("\nVocê saiu da conta. Volte sempre! De preferência trazendo mais dinheiro.");
+      console.log("Retornando ao login...");
       return true;
     }
     
@@ -137,6 +142,7 @@ function consultarSaldo(usuarioId) {
   
   if (usuario !== null) {
     console.log("\n---------- SALDO DISPONÍVEL ----------");
+    console.log("Seu patrimônio está seguro. Pelo menos na memória RAM.");
     console.log(`Saldo disponível: R$ ${usuario.saldo}`);
     console.log("--------------------------------------");
   }
@@ -187,7 +193,7 @@ function depositar(usuarioId) {
 
     // Verificar se o valor é inválido
     if (resultado.status === "invalido") {
-        console.log("\n[ERRO] Valor inválido. Informe um inteiro positivo, como 50.");
+        console.log("\n[ERRO] Valor inválido. Informe um inteiro positivo, como R$ 50.");
         return;
     }
 
@@ -222,7 +228,7 @@ function depositar(usuarioId) {
 
 
     // Confirmar o depósito
-    console.log("\n[OK] Depósito realizado.");
+    console.log("\n[OK] Depósito realizado! A diretoria agradece sua contribuição.");
     console.log("Valor: R$ " + resultado.valor);
     console.log("Novo saldo: R$ " + conta.saldo);
 }
@@ -238,7 +244,7 @@ function sacar(usuarioId) {
     }
 
     if (resultado.status === "invalido") {
-        console.log("\n[ERRO] Valor inválido. Informe um inteiro positivo, como 50.");
+        console.log("\n[ERRO] Valor inválido. Informe um inteiro positivo, como R$ 50.");
         return;
     }
 
@@ -257,7 +263,7 @@ function sacar(usuarioId) {
     }
 
     if (resultado.valor > conta.saldo) {
-        console.log(`\n[ERRO] Saldo insuficiente. Disponível: R$ ${conta.saldo}.`);
+        console.log(`\n[ERRO] Saldo insuficiente. Nem o banco tem esse dinheiro todo, meu patrão! Disponível: R$ ${conta.saldo}.`);
         return;
     }
 
@@ -270,7 +276,7 @@ function sacar(usuarioId) {
         destinoId: null
     });
 
-    console.log("\n[OK] Saque realizado.");
+    console.log("\n[OK] Saque autorizado! Um acontecimento histórico neste banco.");
     console.log("Valor: R$ " + resultado.valor);
     console.log("Novo saldo: R$ " + conta.saldo);
 }
@@ -287,9 +293,9 @@ function exibirExtrato(usuarioId) {
         }
     }
 
-    console.log("\n========================================");
-    console.log(" EXTRATO" + (usuario !== null ? " | " + usuario.nome : ""));
-    console.log("========================================");
+    console.log("\n+--------------------------------------+");
+    console.log("| EXTRATO" + (usuario !== null ? " | " + usuario.nome : ""));
+    console.log("+--------------------------------------+");
 
     for (var i = 0; i < movimentacoes.length; i++) {
         var movimentacao = movimentacoes[i];
@@ -326,7 +332,8 @@ function exibirExtrato(usuarioId) {
                         console.log(
                             "- Pix enviado para " +
                             destinatario.nome +
-                            ": R$ " + movimentacao.valor
+                            ": R$ " + movimentacao.valor +
+                            " — Pelo menos esse dinheiro chegou ao destino."
                         );
                     }
                 } 
@@ -344,7 +351,8 @@ function exibirExtrato(usuarioId) {
                         console.log(
                             "- Pix recebido de " +
                             remetente.nome +
-                            ": R$ " + movimentacao.valor
+                            ": R$ " + movimentacao.valor +
+                            " — Aproveite antes que a diretoria descubra."
                         );
                     }
                 }
@@ -353,7 +361,7 @@ function exibirExtrato(usuarioId) {
     }
 
     if (!encontrouMovimentacao) {
-        console.log("[INFO] Nenhuma movimentação registrada nesta conta.");
+        console.log("[INFO] Nenhuma movimentação. A investigação ainda não começou.");
     }
 
     console.log("----------------------------------------");
@@ -411,12 +419,12 @@ function enviarPix(usuarioId) {
     }
 
     if (resultado.status === "invalido") {
-        console.log("\n[ERRO] Valor inválido. Informe um inteiro positivo, como 50.");
+        console.log("\n[ERRO] Valor inválido. Informe um inteiro positivo, como R$ 50.");
         return;
     }
 
     if (resultado.valor > origem.saldo) {
-        console.log(`\n[ERRO] Saldo insuficiente. Disponível: R$ ${origem.saldo}.`);
+        console.log(`\n[ERRO] Saldo insuficiente. Nem o banco tem esse dinheiro todo, meu patrão! Disponível: R$ ${origem.saldo}.`);
         return;
     }
 
@@ -430,7 +438,7 @@ function enviarPix(usuarioId) {
         destinoId: destinatario.id
     });
 
-    console.log("\n[OK] Pix enviado com sucesso.");
+    console.log("\n[OK] Pix realizado! Pelo menos esse dinheiro chegou ao destino.");
     console.log("Valor: R$ " + resultado.valor);
     console.log("Para: " + destinatario.nome);
     console.log("Novo saldo: R$ " + origem.saldo);
