@@ -1,21 +1,31 @@
 
 // Simulação de um sistema bancário simples
 
+const prompt = require('prompt-sync')();
+
 const usuarios = [
     {
         id: 1,
-        nome: "Ana",
-        login: "ana",
+        nome: "Alexandre",
+        login: "alex",
         senha: "1234",
-        chavePix: "ana",
+        chavePix: "alex",
         saldo: 0
     },
     {
         id: 2,
-        nome: "Bruno",
-        login: "bruno",
+        nome: "Felipe",
+        login: "felp",
         senha: "1234",
-        chavePix: "bruno",
+        chavePix: "felp",
+        saldo: 0
+    },
+    {
+        id: 3,
+        nome: "Ribamar",
+        login: "riba",
+        senha: "1234",
+        chavePix: "riba",
         saldo: 0
     },
 ]

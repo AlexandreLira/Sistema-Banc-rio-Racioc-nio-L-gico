@@ -10,7 +10,7 @@ O nome faz uma referência satírica ao banco paraguaio, sem vínculo com a inst
 
 ## Estado do projeto
 
-**V1 integrada para demonstração.** O arquivo [`index.js`](index.js) inicia com duas contas fictícias e oferece login, consulta de saldo, depósito, saque, extrato e Pix. As operações e o histórico existem apenas em memória e são reiniciados a cada nova execução.
+**V1 integrada para demonstração.** O arquivo [`index.js`](index.js) inicia com três contas fictícias da equipe e oferece login, consulta de saldo, depósito, saque, extrato e Pix. As operações e o histórico existem apenas em memória e são reiniciados a cada nova execução.
 
 O projeto é uma simulação acadêmica local, sem integração com serviços bancários. As funcionalidades da V1 foram organizadas nas [issues do projeto](https://github.com/AlexandreLira/Sistema-Banc-rio-Racioc-nio-L-gico/issues), agrupadas na milestone [V1 — Sistema bancário com Pix](https://github.com/AlexandreLira/Sistema-Banc-rio-Racioc-nio-L-gico/milestone/1).
 
@@ -45,9 +45,9 @@ Os valores serão representados em **reais inteiros positivos**, conforme os req
 
 ## Tecnologias e organização dos dados
 
-O programa deve usar apenas JavaScript em um único `index.js`, sem HTML, CSS, frameworks, dependências externas, módulos ou ferramentas de compilação. A execução ocorre como snippet no navegador, com `prompt` e `console.log`. Markdown e o `package.json` existente podem permanecer como arquivos auxiliares; npm e Node não são necessários para executar o sistema.
+O programa usa JavaScript em um único `index.js`, sem HTML, CSS, frameworks ou ferramentas de compilação. A execução usa Node.js e a dependência `prompt-sync` já declarada no `package.json`; a saída é exibida com `console.log`. Markdown e os arquivos do npm são auxiliares do projeto.
 
-O projeto utiliza **JavaScript no navegador**, com entradas por `prompt` e resultados por `console.log`. Os dados serão mantidos em memória com objetos e arrays, sem banco de dados ou armazenamento permanente. Ao iniciar uma nova execução, o estado será reiniciado.
+Os dados são mantidos em memória com objetos e arrays, sem banco de dados ou armazenamento permanente. Ao iniciar um novo processo, o estado é reiniciado.
 
 A estrutura definida nos requisitos utiliza dois arrays:
 
@@ -58,42 +58,47 @@ A estrutura definida nos requisitos utiliza dois arrays:
 
 Cada Pix terá **um único registro** em `movimentacoes`. No extrato da origem, ele será apresentado como “Pix enviado”; no extrato do destino, como “Pix recebido”. Depósitos terão `origemId` igual a `null`, e saques terão `destinoId` igual a `null`.
 
-O estado inicial contém as contas de demonstração com saldo zero, histórico vazio, `usuarioLogadoId` igual a `null` e próxima movimentação igual a `1`.
+O estado inicial contém Alexandre, Felipe e Ribamar com saldo zero, histórico vazio, `usuarioLogadoId` igual a `null` e próxima movimentação igual a `1`.
 
 ## Como executar
 
-A forma oficial de execução é copiar o conteúdo completo de `index.js` para um único **snippet** — um trecho de código salvo nas ferramentas de desenvolvedor — no Chrome ou no Edge:
+Para executar o sistema, instale a dependência uma vez e inicie o programa pelo terminal:
 
-1. Baixe o repositório ou clone com Git:
+1. Baixe ou clone o repositório:
 
    ```bash
    git clone https://github.com/AlexandreLira/Sistema-Banc-rio-Racioc-nio-L-gico.git
+   cd Sistema-Banc-rio-Racioc-nio-L-gico
    ```
 
-2. Abra uma página comum no navegador e abra as ferramentas de desenvolvedor pelo menu do navegador, em **Mais ferramentas → Ferramentas do desenvolvedor**.
-3. Na aba **Sources / Fontes**, encontre **Snippets**. Se necessário, use o menu de abas adicionais do painel.
-4. Crie um snippet e copie para ele o conteúdo de [`index.js`](index.js).
-5. Execute o snippet com o botão de execução ou com `Ctrl + Enter` no Windows/Linux e `Command + Enter` no macOS.
-6. Faça login com uma das contas fictícias listadas abaixo. Escolha operações no `prompt` e consulte a aba **Console** para ver os resultados.
+2. Instale a dependência e inicie o programa:
 
-Credenciais de demonstração:
+   ```bash
+   npm install
+   npm start
+   ```
+
+3. Digite login, senha e opções no terminal. Use **0 — Sair** para encerrar. Cada nova execução começa com os saldos e o histórico limpos.
+
+Credenciais fictícias da equipe:
 
 | Nome | Login | Senha | Chave Pix |
 | --- | --- | --- | --- |
-| Ana | `ana` | `1234` | `ana` |
-| Bruno | `bruno` | `1234` | `bruno` |
+| Alexandre | `alex` | `1234` | `alex` |
+| Felipe | `felp` | `1234` | `felp` |
+| Ribamar | `riba` | `1234` | `riba` |
 
-O `prompt` é fornecido pelo navegador; executar `node index.js` não oferece essa função. Não é necessário instalar dependências. Para começar outra demonstração do zero, recarregue a página e execute o snippet novamente.
+O `prompt-sync` fornece entrada síncrona no terminal. Para começar outra demonstração do zero, encerre e inicie novamente com `npm start`.
 
 ### Roteiro de demonstração
 
-1. Entre como Ana (`ana` / `1234`) e consulte o saldo inicial de R$ 0.
+1. Entre como Alexandre (`alex` / `1234`) e consulte o saldo inicial de R$ 0.
 2. Deposite R$ 100 e confira o saldo e o extrato.
 3. Saque R$ 30 e confirme o saldo de R$ 70.
-4. Envie um Pix de R$ 20 para a chave `bruno`; Ana fica com R$ 50.
+4. Envie um Pix de R$ 20 para a chave `felp`; Alexandre fica com R$ 50.
 5. Encerre pelo menu. Em uma nova execução, confirme que saldos e histórico voltaram ao estado inicial.
 
-Para demonstrar o extrato de recebimento do Pix na mesma execução, use uma cópia temporária do snippet de teste e chame `exibirExtrato(2)` após a transferência. Não adicione essa chamada à versão entregue; a V1 não inclui troca de usuário.
+Para conferir o extrato de recebimento do Pix sem troca de usuário no menu, use uma cópia temporária de `index.js` com a inicialização substituída por chamadas a `exibirExtrato` para os IDs envolvidos. Não adicione chamadas de teste à versão entregue.
 
 ## Organização de index.js
 
@@ -151,10 +156,10 @@ AlexandreLira revisará as entregas dos colegas; um dos colegas revisará as ent
 
 O documento [`requisitos-sistema-bancario.md`](requisitos-sistema-bancario.md) descreve as regras de negócio, a estrutura de dados e os cenários de aceitação. Ele é a referência para implementar e conferir cada funcionalidade.
 
-Para testar uma função isoladamente, use uma cópia temporária do snippet completo e substitua somente o trecho de inicialização por chamadas de teste. Mantenha os dados e as funções necessários. Recarregue a página antes de executar novamente para recriar o estado inicial. Dados temporários e chamadas de teste não devem entrar no arquivo entregue.
+Para testar uma função isoladamente, use uma cópia temporária de `index.js` e substitua somente a inicialização por chamadas de teste. Mantenha os dados e as funções necessários. Um novo processo recria o estado inicial. Dados temporários e chamadas de teste não devem entrar no arquivo entregue.
 
-Para validar Pix enviado e recebido, chame `exibirExtrato` para os dois IDs no mesmo snippet de teste, após preparar ou realizar a transferência. Isso não acrescenta troca de usuário ao menu.
+Para validar Pix enviado e recebido, chame `exibirExtrato` para os dois IDs no mesmo processo de teste, após preparar ou realizar a transferência. Isso não acrescenta troca de usuário ao menu.
 
-A validação da entrega é manual, cobrindo operações válidas, entradas inválidas, cancelamentos e saldo insuficiente. Não há suíte automatizada no projeto; `npm test` ainda é apenas o script inicial do pacote e não é necessário para executar o snippet.
+A validação da entrega é manual, cobrindo operações válidas, entradas inválidas, cancelamentos e saldo insuficiente. Não há suíte automatizada no projeto; `npm test` ainda é apenas o script inicial do pacote.
 
-Para verificar os dois extratos de um Pix, será necessário consultar os registros dos dois usuários no mesmo estado em memória. A V1 não prevê troca de usuário durante a execução, e reiniciar o programa limpa os dados.
+Para verificar os dois extratos de um Pix, consulte os registros dos dois usuários no mesmo estado em memória. A V1 não prevê troca de usuário durante a execução, e reiniciar o processo limpa os dados.
