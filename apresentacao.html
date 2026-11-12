@@ -248,12 +248,16 @@
     }
 
     @media print {
-      :root { color-scheme: light; }
-      body { display: block; padding: 0; color: #111; background: white; }
+      @page { size: 16in 9in; margin: 0; }
+      :root { color-scheme: dark; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      body { display: block; min-height: 0; padding: 0; color: #f7f9fc; background: var(--navy-900); }
       .topbar, .controls, .checklist { display: none !important; }
       .app, .stage { width: 100%; max-width: none; }
-      .stage { overflow: visible; aspect-ratio: auto; border: 0; border-radius: 0; box-shadow: none; background: white; }
-      .slide, .slide[hidden] { position: relative; inset: auto; display: grid !important; width: 100%; height: 56.25vw; min-height: 0; break-after: page; color: white; background: var(--navy-900); }
+      .stage { min-height: 0; overflow: visible; aspect-ratio: auto; border: 0; border-radius: 0; box-shadow: none; background: var(--navy-900); }
+      .slide, .slide[hidden] { position: relative; inset: auto; display: grid !important; width: 100%; height: 9in; min-height: 0; break-after: page; page-break-after: always; color: #f7f9fc; background: var(--navy-900); }
+      #stage > .slide:last-child { break-after: auto !important; page-break-after: auto !important; }
+      .title-layout { grid-template-columns: minmax(0, 1fr) 230px; gap: 32px; }
+      .logo-card { width: 230px; justify-self: end; transform: none; }
       .notes { display: none; }
     }
   </style>
@@ -465,6 +469,14 @@
         progress.setAttribute("aria-valuenow", String(current + 1));
         announcement.textContent = `Slide ${current + 1} de ${slides.length}: ${slides[current].querySelector("h1, h2").textContent}`;
       }
+
+      window.addEventListener("beforeprint", () => {
+        slides.forEach((slide) => {
+          slide.hidden = false;
+          slide.setAttribute("aria-hidden", "false");
+        });
+      });
+      window.addEventListener("afterprint", () => showSlide(current));
 
       previousButton.addEventListener("click", () => showSlide(current - 1));
       nextButton.addEventListener("click", () => showSlide(current + 1));
