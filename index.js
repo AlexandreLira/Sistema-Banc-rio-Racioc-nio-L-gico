@@ -1,73 +1,39 @@
 
-const prompt = require('prompt-sync')();
-
-
 // Simulação de um sistema bancário simples
 
 const usuarios = [
     {
         id: 1,
-        nome: "Alexandre",
-        login: "alex",
+        nome: "Ana",
+        login: "ana",
         senha: "1234",
-        chavePix: "85988282464",
+        chavePix: "ana",
         saldo: 0
     },
     {
         id: 2,
-        nome: "Felipe",
-        login: "felp",
-        senha: "1973",
-        chavePix: "85985440535",
+        nome: "Bruno",
+        login: "bruno",
+        senha: "1234",
+        chavePix: "bruno",
         saldo: 0
     },
 ]
 
 
-const movimentacoes = [
-    {
-        id: 1,
-        tipo: "deposito",
-        valor: 500,
-        origemId: null,
-        destinoId: 1
-    },
-    {
-        id: 2,
-        tipo: "saque",
-        valor: 100,
-        origemId: 1,
-        destinoId: null
-    },
-    {
-        id: 3,
-        tipo: "pix",
-        valor: 150,
-        origemId: 1,
-        destinoId: 2
-    },
-    {
-        id: 4,
-        tipo: "deposito",
-        valor: 300,
-        origemId: null,
-        destinoId: 3
-    }
-];
+const movimentacoes = [];
 
-let usuarioLogado = {};
+let usuarioLogadoId = null;
+let proximaMovimentacaoId = 1;
 
-// ==== Início do programa ====
-main();
-
-
-// ==== FUNCÕES DO SISTEMA BANCÁRIO ==== 
+// ==== FUNÇÕES DO SISTEMA BANCÁRIO ====
 
 
 
-// Função para gerar um ID aleatório
+// Função para gerar o próximo ID sequencial
 function gerarId() {
-    const id = Math.floor(Math.random() * 1000);
+    const id = proximaMovimentacaoId;
+    proximaMovimentacaoId = proximaMovimentacaoId + 1;
     return id;
 }
 
@@ -96,7 +62,7 @@ function fazerLogin() {
       usuarioLogadoId = usuarioEncontrado.id;
       return usuarioLogadoId;
     } else {
-      alert("Usuário ou senha inválidos");
+      console.log("Usuário ou senha inválidos.");
     }
   }
 }
@@ -136,7 +102,7 @@ function exibirMenu(usuarioId) {
     } else if (opcaoTrim === "5") {
       enviarPix(usuarioId);
     } else {
-      alert("Opção inválida. Escolha uma opção válida do menu.");
+      console.log("Opção inválida. Escolha uma opção válida do menu.");
     }
   }
 }
@@ -240,9 +206,50 @@ function depositar(usuarioId) {
 }
 
 
-// função para realizar um saque
-function sacar() {
+// Função para realizar um saque
+function sacar(usuarioId) {
+    let resultado = solicitarValor();
 
+    if (resultado.status === "cancelado") {
+        return;
+    }
+
+    if (resultado.status === "invalido") {
+        console.log("Valor inválido!");
+        return;
+    }
+
+    let conta = null;
+
+    for (let i = 0; i < usuarios.length; i++) {
+        if (usuarios[i].id === usuarioId) {
+            conta = usuarios[i];
+            break;
+        }
+    }
+
+    if (conta === null) {
+        console.log("Conta não encontrada.");
+        return;
+    }
+
+    if (resultado.valor > conta.saldo) {
+        console.log("Saldo insuficiente.");
+        return;
+    }
+
+    conta.saldo = conta.saldo - resultado.valor;
+    movimentacoes.push({
+        id: gerarId(),
+        tipo: "saque",
+        valor: resultado.valor,
+        origemId: usuarioId,
+        destinoId: null
+    });
+
+    console.log("Saque realizado com sucesso!");
+    console.log("Valor sacado: R$ " + resultado.valor);
+    console.log("Saldo atual: R$ " + conta.saldo);
 }
 
 // funcão para exibir o extrato do usuário
@@ -378,18 +385,10 @@ function enviarPix(usuarioId) {
         return;
     }
 
-    let proximoId = 1;
-
-    for (let i = 0; i < movimentacoes.length; i++) {
-        if (movimentacoes[i].id >= proximoId) {
-            proximoId = movimentacoes[i].id + 1;
-        }
-    }
-
     origem.saldo = origem.saldo - resultado.valor;
     destinatario.saldo = destinatario.saldo + resultado.valor;
     movimentacoes.push({
-        id: proximoId,
+        id: gerarId(),
         tipo: "pix",
         valor: resultado.valor,
         origemId: origem.id,
@@ -403,9 +402,15 @@ function enviarPix(usuarioId) {
 
 // Função principal do sistema bancário
 function main() {
-    exibirMenu();
-    fazerLogin()
+    const usuarioId = fazerLogin();
+
+    if (usuarioId !== null) {
+        exibirMenu(usuarioId);
+    }
 }
+
+// ==== Início do programa ====
+main();
 
 
 
