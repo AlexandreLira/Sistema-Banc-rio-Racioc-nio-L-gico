@@ -50,13 +50,15 @@ function gerarId() {
 // Função para realizar o login do usuário
 function fazerLogin() {
   while (true) {
-    const loginInput = prompt("Digite o login:");
+    const loginInput = prompt("Login: ");
     if (loginInput === null) {
+      console.log("\n[INFO] Login cancelado. Encerrando o sistema.");
       return null;
     }
     
-    const senhaInput = prompt("Digite a senha:");
+    const senhaInput = prompt("Senha: ");
     if (senhaInput === null) {
+      console.log("\n[INFO] Login cancelado. Encerrando o sistema.");
       return null;
     }
     
@@ -70,9 +72,10 @@ function fazerLogin() {
     
     if (usuarioEncontrado !== null) {
       usuarioLogadoId = usuarioEncontrado.id;
+      console.log(`\nBem-vindo, ${usuarioEncontrado.nome}!`);
       return usuarioLogadoId;
     } else {
-      console.log("Usuário ou senha inválidos.");
+      console.log("\n[ERRO] Login ou senha inválidos. Confira os dados e tente novamente.\n");
     }
   }
 }
@@ -83,18 +86,22 @@ function exibirMenu(usuarioId) {
   let executando = true;
   
   while (executando) {
-    const opcao = prompt(
-      "Escolha uma opção:\n" +
-      "1 — Saldo\n" +
-      "2 — Depósito\n" +
-      "3 — Saque\n" +
-      "4 — Extrato\n" +
-      "5 — Pix\n" +
-      "0 — Sair"
-    );
+    console.log("\n========================================");
+    console.log("             UENO BANK | MENU");
+    console.log("========================================");
+    console.log("  1  Consultar saldo");
+    console.log("  2  Fazer depósito");
+    console.log("  3  Fazer saque");
+    console.log("  4  Consultar extrato");
+    console.log("  5  Enviar Pix");
+    console.log("  0  Sair");
+    console.log("----------------------------------------");
+
+    const opcao = prompt("Selecione uma opção de 0 a 5: ");
     
     // Tratar cancelamento (null) ou opção "0 — Sair"
     if (opcao === null || opcao.trim() === "0") {
+      console.log("\nSessão encerrada. Até logo!");
       executando = false;
       break;
     }
@@ -112,7 +119,7 @@ function exibirMenu(usuarioId) {
     } else if (opcaoTrim === "5") {
       enviarPix(usuarioId);
     } else {
-      console.log("Opção inválida. Escolha uma opção válida do menu.");
+      console.log("\n[ERRO] Opção inválida. Digite um número de 0 a 5.");
     }
   }
 }
@@ -127,14 +134,16 @@ function consultarSaldo(usuarioId) {
   }
   
   if (usuario !== null) {
-    console.log(`Seu saldo atual é: R$ ${usuario.saldo}`);
+    console.log("\n---------- SALDO DISPONÍVEL ----------");
+    console.log(`Saldo disponível: R$ ${usuario.saldo}`);
+    console.log("--------------------------------------");
   }
 }
 
 
 // Função para realizar um depósito
 function solicitarValor() {
-    let entrada = prompt("Digite o valor:");
+    let entrada = prompt("Valor em reais (inteiro positivo, ex.: 50): ");
 
     if (entrada === null) {
         return { status: "cancelado" };
@@ -170,12 +179,13 @@ function depositar(usuarioId) {
 
     // Verificar se foi cancelado
     if (resultado.status === "cancelado") {
+        console.log("\n[INFO] Depósito cancelado. Nenhuma alteração foi feita.");
         return;
     }
 
     // Verificar se o valor é inválido
     if (resultado.status === "invalido") {
-        console.log("Valor inválido!");
+        console.log("\n[ERRO] Valor inválido. Informe um inteiro positivo, como 50.");
         return;
     }
 
@@ -192,7 +202,7 @@ function depositar(usuarioId) {
 
     // Verificar se a conta existe
     if (conta === null) {
-        console.log("Conta não encontrada.");
+        console.log("\n[ERRO] Não foi possível localizar sua conta.");
         return;
     }
 
@@ -210,9 +220,9 @@ function depositar(usuarioId) {
 
 
     // Confirmar o depósito
-    console.log("Depósito realizado com sucesso!");
-    console.log("Valor depositado: R$ " + resultado.valor);
-    console.log("Saldo atual: R$ " + conta.saldo);
+    console.log("\n[OK] Depósito realizado.");
+    console.log("Valor: R$ " + resultado.valor);
+    console.log("Novo saldo: R$ " + conta.saldo);
 }
 
 
@@ -221,11 +231,12 @@ function sacar(usuarioId) {
     let resultado = solicitarValor();
 
     if (resultado.status === "cancelado") {
+        console.log("\n[INFO] Saque cancelado. Nenhuma alteração foi feita.");
         return;
     }
 
     if (resultado.status === "invalido") {
-        console.log("Valor inválido!");
+        console.log("\n[ERRO] Valor inválido. Informe um inteiro positivo, como 50.");
         return;
     }
 
@@ -239,12 +250,12 @@ function sacar(usuarioId) {
     }
 
     if (conta === null) {
-        console.log("Conta não encontrada.");
+        console.log("\n[ERRO] Não foi possível localizar sua conta.");
         return;
     }
 
     if (resultado.valor > conta.saldo) {
-        console.log("Saldo insuficiente.");
+        console.log(`\n[ERRO] Saldo insuficiente. Disponível: R$ ${conta.saldo}.`);
         return;
     }
 
@@ -257,16 +268,26 @@ function sacar(usuarioId) {
         destinoId: null
     });
 
-    console.log("Saque realizado com sucesso!");
-    console.log("Valor sacado: R$ " + resultado.valor);
-    console.log("Saldo atual: R$ " + conta.saldo);
+    console.log("\n[OK] Saque realizado.");
+    console.log("Valor: R$ " + resultado.valor);
+    console.log("Novo saldo: R$ " + conta.saldo);
 }
 
 // funcão para exibir o extrato do usuário
 function exibirExtrato(usuarioId) {
     var encontrouMovimentacao = false;
+    var usuario = null;
 
-    console.log("========== EXTRATO ==========");
+    for (var k = 0; k < usuarios.length; k++) {
+        if (usuarios[k].id === usuarioId) {
+            usuario = usuarios[k];
+            break;
+        }
+    }
+
+    console.log("\n========================================");
+    console.log(" EXTRATO" + (usuario !== null ? " | " + usuario.nome : ""));
+    console.log("========================================");
 
     for (var i = 0; i < movimentacoes.length; i++) {
         var movimentacao = movimentacoes[i];
@@ -279,12 +300,12 @@ function exibirExtrato(usuarioId) {
 
             if (movimentacao.tipo === "deposito") {
                 console.log(
-                    "Depósito: R$ " + movimentacao.valor
+                    "- Depósito: R$ " + movimentacao.valor
                 );
             } 
             else if (movimentacao.tipo === "saque") {
                 console.log(
-                    "Saque: R$ " + movimentacao.valor
+                    "- Saque: R$ " + movimentacao.valor
                 );
             } 
             else if (movimentacao.tipo === "pix") {
@@ -301,7 +322,7 @@ function exibirExtrato(usuarioId) {
 
                     if (destinatario !== null) {
                         console.log(
-                            "Pix enviado para " +
+                            "- Pix enviado para " +
                             destinatario.nome +
                             ": R$ " + movimentacao.valor
                         );
@@ -319,7 +340,7 @@ function exibirExtrato(usuarioId) {
 
                     if (remetente !== null) {
                         console.log(
-                            "Pix recebido de " +
+                            "- Pix recebido de " +
                             remetente.nome +
                             ": R$ " + movimentacao.valor
                         );
@@ -330,10 +351,10 @@ function exibirExtrato(usuarioId) {
     }
 
     if (!encontrouMovimentacao) {
-        console.log("Nenhuma movimentação registrada");
+        console.log("[INFO] Nenhuma movimentação registrada nesta conta.");
     }
 
-    console.log("=============================");
+    console.log("----------------------------------------");
 }
 
 
@@ -350,13 +371,14 @@ function enviarPix(usuarioId) {
     }
 
     if (origem === null) {
-        console.log("Conta de origem não encontrada.");
+        console.log("\n[ERRO] Não foi possível localizar a conta de origem.");
         return;
     }
 
-    let chavePix = prompt("Digite a chave Pix do destinatário:");
+    let chavePix = prompt("Chave Pix de quem vai receber: ");
 
     if (chavePix === null) {
+        console.log("\n[INFO] Pix cancelado. Nenhuma alteração foi feita.");
         return;
     }
 
@@ -370,28 +392,29 @@ function enviarPix(usuarioId) {
     }
 
     if (destinatario === null) {
-        console.log("Destinatário inválido.");
+        console.log("\n[ERRO] Chave Pix não encontrada. Confira a chave e tente novamente.");
         return;
     }
 
     if (destinatario.id === origem.id) {
-        console.log("Não é permitido enviar Pix para a própria conta.");
+        console.log("\n[ERRO] Não é possível enviar Pix para sua própria conta.");
         return;
     }
 
     let resultado = solicitarValor();
 
     if (resultado.status === "cancelado") {
+        console.log("\n[INFO] Pix cancelado. Nenhuma alteração foi feita.");
         return;
     }
 
     if (resultado.status === "invalido") {
-        console.log("Valor inválido!");
+        console.log("\n[ERRO] Valor inválido. Informe um inteiro positivo, como 50.");
         return;
     }
 
     if (resultado.valor > origem.saldo) {
-        console.log("Saldo insuficiente.");
+        console.log(`\n[ERRO] Saldo insuficiente. Disponível: R$ ${origem.saldo}.`);
         return;
     }
 
@@ -405,9 +428,10 @@ function enviarPix(usuarioId) {
         destinoId: destinatario.id
     });
 
-    console.log("Pix realizado com sucesso!");
-    console.log("Valor enviado: R$ " + resultado.valor);
-    console.log("Destinatário: " + destinatario.nome);
+    console.log("\n[OK] Pix enviado com sucesso.");
+    console.log("Valor: R$ " + resultado.valor);
+    console.log("Para: " + destinatario.nome);
+    console.log("Novo saldo: R$ " + origem.saldo);
 }
 
 // Função principal do sistema bancário
