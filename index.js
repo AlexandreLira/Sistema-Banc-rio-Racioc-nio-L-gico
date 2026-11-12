@@ -83,9 +83,7 @@ function fazerLogin() {
 
 // Função para exibir o menu de opções
 function exibirMenu(usuarioId) {
-  let executando = true;
-  
-  while (executando) {
+  while (true) {
     console.log("\n========================================");
     console.log("             UENO BANK | MENU");
     console.log("========================================");
@@ -94,16 +92,20 @@ function exibirMenu(usuarioId) {
     console.log("  3  Fazer saque");
     console.log("  4  Consultar extrato");
     console.log("  5  Enviar Pix");
-    console.log("  0  Sair");
+    console.log("  0  Sair da conta");
     console.log("----------------------------------------");
 
     const opcao = prompt("Selecione uma opção de 0 a 5: ");
     
-    // Tratar cancelamento (null) ou opção "0 — Sair"
-    if (opcao === null || opcao.trim() === "0") {
-      console.log("\nSessão encerrada. Até logo!");
-      executando = false;
-      break;
+    // Ctrl+C encerra o sistema; a opção 0 retorna ao login.
+    if (opcao === null) {
+      console.log("\nSistema encerrado.");
+      return false;
+    }
+
+    if (opcao.trim() === "0") {
+      console.log("\nVocê saiu da conta. Faça login para continuar.");
+      return true;
     }
     
     const opcaoTrim = opcao.trim();
@@ -436,10 +438,19 @@ function enviarPix(usuarioId) {
 
 // Função principal do sistema bancário
 function main() {
-    const usuarioId = fazerLogin();
+    while (true) {
+        const usuarioId = fazerLogin();
 
-    if (usuarioId !== null) {
-        exibirMenu(usuarioId);
+        if (usuarioId === null) {
+            return;
+        }
+
+        const saiuDaConta = exibirMenu(usuarioId);
+        usuarioLogadoId = null;
+
+        if (!saiuDaConta) {
+            return;
+        }
     }
 }
 

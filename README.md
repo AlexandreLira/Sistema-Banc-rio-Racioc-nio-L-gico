@@ -78,7 +78,7 @@ Para executar o sistema, instale a dependência uma vez e inicie o programa pelo
    npm start
    ```
 
-3. Digite login, senha e opções no terminal. Use **0 — Sair** para encerrar. Cada nova execução começa com os saldos e o histórico limpos.
+3. Digite login, senha e opções no terminal. Use **0 — Sair da conta** para voltar ao login e entrar em outra conta; o estado permanece até encerrar o processo. Inicie novamente com `npm start` para zerar os saldos e o histórico.
 
 Credenciais fictícias da equipe:
 
@@ -96,9 +96,10 @@ O `prompt-sync` fornece entrada síncrona no terminal. Para começar outra demon
 2. Deposite R$ 100 e confira o saldo e o extrato.
 3. Saque R$ 30 e confirme o saldo de R$ 70.
 4. Envie um Pix de R$ 20 para a chave `felp`; Alexandre fica com R$ 50.
-5. Encerre pelo menu. Em uma nova execução, confirme que saldos e histórico voltaram ao estado inicial.
+5. Escolha **0 — Sair da conta**, entre como Felipe (`felp` / `1234`) e consulte o extrato; ele mostra o Pix recebido de Alexandre e saldo de R$ 20.
+6. Escolha **0 — Sair da conta** para voltar ao login. Encerre com `Ctrl+C`; uma nova execução inicia com saldos zero e histórico vazio.
 
-Para conferir o extrato de recebimento do Pix sem troca de usuário no menu, use uma cópia temporária de `index.js` com a inicialização substituída por chamadas a `exibirExtrato` para os IDs envolvidos. Não adicione chamadas de teste à versão entregue.
+O menu permite alternar entre contas durante a mesma execução, mantendo os dados em memória. Assim, você pode conferir o Pix enviado e recebido nos extratos de Alexandre e Felipe sem chamadas de teste.
 
 ## Organização de index.js
 
@@ -120,7 +121,7 @@ O arquivo organiza dados, validação, login, operações, menu e inicializaçã
 | Função | Contrato |
 | --- | --- |
 | `fazerLogin()` | Guarda o ID em `usuarioLogadoId` e retorna esse ID; retorna `null` ao cancelar. |
-| `exibirMenu(usuarioId)` | Repete o menu, chama as operações e encerra com `0` ou cancelamento. |
+| `exibirMenu(usuarioId)` | Repete o menu, chama as operações e retorna ao login com `0`; o cancelamento do menu encerra o processo. |
 | `consultarSaldo(usuarioId)` | Exibe o saldo da conta indicada. |
 | `solicitarValor()` | Retorna `{ status: "valido", valor }`, `{ status: "invalido" }` ou `{ status: "cancelado" }`. Não altera os dados. |
 | `depositar(usuarioId)` / `sacar(usuarioId)` | Solicitam valor e atualizam saldo, histórico e contador apenas após todas as validações. |
@@ -158,8 +159,8 @@ O documento [`requisitos-sistema-bancario.md`](requisitos-sistema-bancario.md) d
 
 Para testar uma função isoladamente, use uma cópia temporária de `index.js` e substitua somente a inicialização por chamadas de teste. Mantenha os dados e as funções necessários. Um novo processo recria o estado inicial. Dados temporários e chamadas de teste não devem entrar no arquivo entregue.
 
-Para validar Pix enviado e recebido, chame `exibirExtrato` para os dois IDs no mesmo processo de teste, após preparar ou realizar a transferência. Isso não acrescenta troca de usuário ao menu.
+Para validar Pix enviado e recebido, faça a transferência, escolha **0 — Sair da conta**, entre com o login do destinatário e consulte seu extrato. Os saldos e o histórico continuam disponíveis durante o processo.
 
 A validação da entrega é manual, cobrindo operações válidas, entradas inválidas, cancelamentos e saldo insuficiente. Não há suíte automatizada no projeto; `npm test` ainda é apenas o script inicial do pacote.
 
-Para verificar os dois extratos de um Pix, consulte os registros dos dois usuários no mesmo estado em memória. A V1 não prevê troca de usuário durante a execução, e reiniciar o processo limpa os dados.
+Sair da conta retorna ao login e mantém os dados em memória para a próxima sessão. Encerrar e iniciar o processo limpa saldos e movimentações.
